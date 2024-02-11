@@ -51,7 +51,9 @@ Route::post("/login", function (Request $request) {
 });
 
 Route::post("/loginToken", function (Request $request) {
-  $user = User::all()->where('remember_token', $request->token)->first();
+  $token = $request->header('Authorization');
+  $token = str_replace('Bearer ', '', $token);
+  $user = User::all()->where('remember_token', $token)->first();
   if (!$user) {
     return response()->json(['message' => 'Неизвестный токен']);
   }
